@@ -131,7 +131,7 @@ ${windSpeed} km/u (${beaufort} Bft)
 
 ${windCompass} (${windDirection}°)
 
-
+`;
 
 
 const pos =

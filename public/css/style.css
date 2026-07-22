@@ -1,37 +1,22 @@
 html,
 body {
+    margin:0;
+    height:100%;
+}
 
-margin:0;
-height:100%;
-font-family:Arial;
+
+#panel {
+
+    height:160px;
+    padding:15px;
+    box-sizing:border-box;
+    background:white;
 
 }
 
 
 #map {
 
-height:calc(100% - 140px);
-
-}
-
-
-#panel {
-
-height:140px;
-
-padding:10px;
-
-box-sizing:border-box;
-
-background:white;
-
-}
-
-
-#status {
-
-font-size:16px;
-
-line-height:1.5;
+    height:calc(100% - 160px);
 
 }

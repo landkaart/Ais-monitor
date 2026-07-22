@@ -50,6 +50,7 @@ function degreesToCompass(deg = 0) {
 
 
 
+
 export default async function handler(req,res) {
 
     try {

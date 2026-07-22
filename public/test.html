@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AIS Test</title>
+</head>
+<body>
+
+<h2>Marinesia AIS Test</h2>
+
+<button onclick="testAIS()">Haal positie op</button>
+
+<pre id="result"></pre>
+
+<script>
+async function testAIS() {
+  const result = document.getElementById("result");
+
+  result.textContent = "Laden...";
+
+  try {
+    const response = await fetch("/api/stream");
+    const data = await response.json();
+
+    result.textContent =
+      JSON.stringify(data, null, 2);
+
+  } catch (error) {
+    result.textContent =
+      "Fout: " + error.message;
+  }
+}
+</script>
+
+</body>
+</html>

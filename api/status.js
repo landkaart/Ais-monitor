@@ -1,4 +1,5 @@
 import { db } from "../lib/db.js";
+import { getMarineContext } from "./seaAreaService.js";
 
 
 function kmhToBeaufort(kmh) {
@@ -18,6 +19,7 @@ function kmhToBeaufort(kmh) {
 
     return 12;
 }
+
 
 
 function degreesToCompass(deg) {
@@ -53,13 +55,11 @@ export default async function handler(req, res) {
     try {
 
 
-        const mmsi =
-        process.env.MMSI;
+        const mmsi = process.env.MMSI;
 
 
 
-        const result =
-        await db.execute({
+        const result = await db.execute({
 
             sql: `
             SELECT *
@@ -89,47 +89,48 @@ export default async function handler(req, res) {
 
 
 
-        const vessel =
-        result.rows[0];
+        const vessel = result.rows[0];
 
 
 
         /*
-        WEER OPHALEN
+        WEER
         */
 
-        const weatherResponse =
-        await fetch(
+        const weatherResponse = await fetch(
+
             `https://api.open-meteo.com/v1/forecast?latitude=${vessel.latitude}&longitude=${vessel.longitude}&current=wind_speed_10m,wind_direction_10m,precipitation,temperature_2m`
+
         );
 
 
         const weather =
-        await weatherResponse.json();
+            await weatherResponse.json();
+
 
 
         const windSpeed =
-        weather.current.wind_speed_10m;
+            weather.current.wind_speed_10m;
 
 
         const windDirection =
-        weather.current.wind_direction_10m;
+            weather.current.wind_direction_10m;
 
 
         const windBft =
-        kmhToBeaufort(windSpeed);
+            kmhToBeaufort(windSpeed);
 
 
         const windCompass =
-        degreesToCompass(windDirection);
+            degreesToCompass(windDirection);
 
 
         const rain =
-        weather.current.precipitation;
+            weather.current.precipitation;
 
 
         const temperature =
-        weather.current.temperature_2m;
+            weather.current.temperature_2m;
 
 
 
@@ -138,29 +139,20 @@ export default async function handler(req, res) {
         */
 
         const lastUpdate =
-        new Date(
-            vessel.created_at
-        );
-
+            new Date(
+                vessel.created_at
+            );
 
 
         const minutesAgo =
-        Math.round(
-            (Date.now()-lastUpdate.getTime())
-            /
-            60000
-        );
+            Math.round(
+                (Date.now() - lastUpdate.getTime()) / 60000
+            );
 
 
 
-        let online = true;
-
-
-        if(minutesAgo > 180){
-
-            online=false;
-
-        }
+        const online =
+            minutesAgo <= 180;
 
 
 
@@ -182,27 +174,28 @@ export default async function handler(req, res) {
             iconStatus="STIL";
 
         }
-				
-				
-				import { getMarineContext }
-from "./seaAreaService.js";
 
 
-const gps = [
-  vessel.longitude,vessel.latitude
-  
-];
+
+        /*
+        MET OFFICE SEA AREA
+        */
+
+        const gps = [
+
+            Number(vessel.longitude),
+            Number(vessel.latitude)
+
+        ];
 
 
-const marine =
-  getMarineContext(gps);
-
-
-console.log(marine);
+        const marine =
+            getMarineContext(gps);
 
 
 
         return res.json({
+
 
             mmsi:vessel.mmsi,
 
@@ -212,16 +205,21 @@ console.log(marine);
 
             speed:vessel.speed,
 
+
             status:iconStatus,
 
             online,
+
 
             last_update:vessel.created_at,
 
             minutes_ago:minutesAgo,
 
 
-            // WEER
+
+            /*
+            WEER
+            */
 
             wind_speed:windSpeed,
 
@@ -234,22 +232,39 @@ console.log(marine);
             rain:rain,
 
             temperature:temperature,
-           
-						area: marine.name,
-e
+
+
+
+            /*
+            ZEEGEBIED
+            */
+
+            area:
+                marine?.[0]?.name || null,
+
+
+            area_category:
+                marine?.[0]?.category || null,
+
+
+
             google_maps:
+
             `https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
+
 
         });
 
 
     }
+
+
     catch(error){
 
         console.error(error);
 
 
-        res.status(500).json({
+        return res.status(500).json({
 
             error:error.message
 

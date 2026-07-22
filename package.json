@@ -1,6 +1,8 @@
 {
   "type": "module",
   "dependencies": {
-    "@libsql/client": "^0.15.0"
+    "@libsql/client": "^0.15.0",
+	  "@turf/turf": "^7.x.x"
+}
   }
 }

@@ -182,6 +182,23 @@ export default async function handler(req, res) {
             iconStatus="STIL";
 
         }
+				
+				
+				import { getMarineContext }
+from "./seaAreaService.js";
+
+
+const gps = [
+  vessel.longitude,vessel.latitude
+  
+];
+
+
+const marine =
+  getMarineContext(gps);
+
+
+console.log(marine);
 
 
 
@@ -217,8 +234,9 @@ export default async function handler(req, res) {
             rain:rain,
 
             temperature:temperature,
-
-
+           
+						area: marine.name,
+e
             google_maps:
             `https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
 

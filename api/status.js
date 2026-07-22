@@ -2,7 +2,7 @@ import { db } from "../lib/db.js";
 import { getMarineContext } from "./seaAreaService.js";
 
 
-function kmhToBeaufort(kmh) {
+function kmhToBeaufort(kmh = 0) {
 
     if (kmh < 1) return 0;
     if (kmh < 6) return 1;
@@ -22,7 +22,7 @@ function kmhToBeaufort(kmh) {
 
 
 
-function degreesToCompass(deg) {
+function degreesToCompass(deg = 0) {
 
     const directions = [
         "N",
@@ -43,6 +43,7 @@ function degreesToCompass(deg) {
         "NNW"
     ];
 
+
     return directions[
         Math.round(deg / 22.5) % 16
     ];
@@ -55,29 +56,31 @@ export default async function handler(req, res) {
     try {
 
 
-        const mmsi = process.env.MMSI;
+        const mmsi =
+            process.env.MMSI;
 
 
 
-        const result = await db.execute({
+        const result =
+            await db.execute({
 
-            sql: `
-            SELECT *
-            FROM positions
-            WHERE mmsi=?
-            ORDER BY id DESC
-            LIMIT 1
-            `,
+                sql: `
+                SELECT *
+                FROM positions
+                WHERE mmsi=?
+                ORDER BY id DESC
+                LIMIT 1
+                `,
 
-            args:[
-                mmsi
-            ]
+                args:[
+                    mmsi
+                ]
 
-        });
+            });
 
 
 
-        if(result.rows.length === 0){
+        if(!result.rows.length){
 
             return res.status(404).json({
 
@@ -89,54 +92,79 @@ export default async function handler(req, res) {
 
 
 
-        const vessel = result.rows[0];
+        const vessel =
+            result.rows[0];
 
 
 
         /*
-        WEER
+        WEATHER
         */
 
-        const weatherResponse = await fetch(
+        let weatherData = {};
 
-            `https://api.open-meteo.com/v1/forecast?latitude=${vessel.latitude}&longitude=${vessel.longitude}&current=wind_speed_10m,wind_direction_10m,precipitation,temperature_2m`
+        try {
 
-        );
+            const weatherResponse =
+                await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${vessel.latitude}&longitude=${vessel.longitude}&current=wind_speed_10m,wind_direction_10m,precipitation,temperature_2m`
+                );
 
 
-        const weather =
-            await weatherResponse.json();
+            weatherData =
+                await weatherResponse.json();
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Weather fout:",
+                error.message
+            );
+
+        }
+
+
+
+        const current =
+            weatherData.current || {};
 
 
 
         const windSpeed =
-            weather.current.wind_speed_10m;
+            current.wind_speed_10m || 0;
 
 
         const windDirection =
-            weather.current.wind_direction_10m;
+            current.wind_direction_10m || 0;
 
 
         const windBft =
-            kmhToBeaufort(windSpeed);
+            kmhToBeaufort(
+                windSpeed
+            );
 
 
         const windCompass =
-            degreesToCompass(windDirection);
+            degreesToCompass(
+                windDirection
+            );
 
 
         const rain =
-            weather.current.precipitation;
+            current.precipitation || 0;
 
 
         const temperature =
-            weather.current.temperature_2m;
+            current.temperature_2m ?? null;
 
 
 
         /*
         AIS STATUS
         */
+
 
         const lastUpdate =
             new Date(
@@ -146,9 +174,11 @@ export default async function handler(req, res) {
 
         const minutesAgo =
             Math.round(
-                (Date.now() - lastUpdate.getTime()) / 60000
+                (Date.now() -
+                lastUpdate.getTime())
+                /
+                60000
             );
-
 
 
         const online =
@@ -156,87 +186,123 @@ export default async function handler(req, res) {
 
 
 
-        let iconStatus;
+        let iconStatus =
+            "STIL";
 
 
         if(!online){
 
-            iconStatus="OFFLINE";
+            iconStatus =
+                "OFFLINE";
 
         }
-        else if(vessel.status==="VAART"){
 
-            iconStatus="VAART";
+        else if(
+            vessel.status === "VAART"
+        ){
 
-        }
-        else {
-
-            iconStatus="STIL";
+            iconStatus =
+                "VAART";
 
         }
 
 
 
         /*
-        MET OFFICE SEA AREA
+        SEA AREA
         */
 
-        const gps = [
 
-            Number(vessel.longitude),
-            Number(vessel.latitude)
-
-        ];
+        let marine = null;
 
 
-        const marine =
-            getMarineContext(gps);
+        try {
+
+            marine =
+                getMarineContext([
+
+                    Number(vessel.longitude),
+
+                    Number(vessel.latitude)
+
+                ]);
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Sea area fout:",
+                error.message
+            );
+
+        }
 
 
 
         return res.json({
 
-
-            mmsi:vessel.mmsi,
-
-            latitude:vessel.latitude,
-
-            longitude:vessel.longitude,
-
-            speed:vessel.speed,
+            mmsi:
+                vessel.mmsi,
 
 
-            status:iconStatus,
+            latitude:
+                vessel.latitude,
+
+
+            longitude:
+                vessel.longitude,
+
+
+            speed:
+                vessel.speed,
+
+
+            status:
+                iconStatus,
+
 
             online,
 
 
-            last_update:vessel.created_at,
+            last_update:
+                vessel.created_at,
 
-            minutes_ago:minutesAgo,
+
+            minutes_ago:
+                minutesAgo,
 
 
 
             /*
-            WEER
+            WEATHER
             */
 
-            wind_speed:windSpeed,
+            wind_speed:
+                windSpeed,
 
-            wind_bft:windBft,
 
-            wind_direction:windDirection,
+            wind_bft:
+                windBft,
 
-            wind_compass:windCompass,
 
-            rain:rain,
+            wind_direction:
+                windDirection,
 
-            temperature:temperature,
+
+            wind_compass:
+                windCompass,
+
+
+            rain,
+
+
+            temperature,
 
 
 
             /*
-            ZEEGEBIED
+            MARINE
             */
 
             area:
@@ -250,7 +316,7 @@ export default async function handler(req, res) {
 
             google_maps:
 
-            `https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
+                `https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
 
 
         });
@@ -261,12 +327,17 @@ export default async function handler(req, res) {
 
     catch(error){
 
-        console.error(error);
+
+        console.error(
+            "AIS API fout:",
+            error
+        );
 
 
         return res.status(500).json({
 
-            error:error.message
+            error:
+                error.message
 
         });
 

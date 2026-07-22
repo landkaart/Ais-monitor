@@ -43,7 +43,6 @@ function degreesToCompass(deg = 0) {
         "NNW"
     ];
 
-
     return directions[
         Math.round(deg / 22.5) % 16
     ];
@@ -51,7 +50,7 @@ function degreesToCompass(deg = 0) {
 
 
 
-export default async function handler(req, res) {
+export default async function handler(req,res) {
 
     try {
 
@@ -64,7 +63,7 @@ export default async function handler(req, res) {
         const result =
             await db.execute({
 
-                sql: `
+                sql:`
                 SELECT *
                 FROM positions
                 WHERE mmsi=?
@@ -101,25 +100,28 @@ export default async function handler(req, res) {
         WEATHER
         */
 
-        let weatherData = {};
+
+        let weather = {};
 
         try {
 
-            const weatherResponse =
+
+            const response =
                 await fetch(
                     `https://api.open-meteo.com/v1/forecast?latitude=${vessel.latitude}&longitude=${vessel.longitude}&current=wind_speed_10m,wind_direction_10m,precipitation,temperature_2m`
                 );
 
 
-            weatherData =
-                await weatherResponse.json();
+            weather =
+                await response.json();
+
 
         }
 
         catch(error){
 
             console.error(
-                "Weather fout:",
+                "Weather:",
                 error.message
             );
 
@@ -128,7 +130,7 @@ export default async function handler(req, res) {
 
 
         const current =
-            weatherData.current || {};
+            weather.current || {};
 
 
 
@@ -138,26 +140,6 @@ export default async function handler(req, res) {
 
         const windDirection =
             current.wind_direction_10m || 0;
-
-
-        const windBft =
-            kmhToBeaufort(
-                windSpeed
-            );
-
-
-        const windCompass =
-            degreesToCompass(
-                windDirection
-            );
-
-
-        const rain =
-            current.precipitation || 0;
-
-
-        const temperature =
-            current.temperature_2m ?? null;
 
 
 
@@ -174,8 +156,7 @@ export default async function handler(req, res) {
 
         const minutesAgo =
             Math.round(
-                (Date.now() -
-                lastUpdate.getTime())
+                (Date.now()-lastUpdate.getTime())
                 /
                 60000
             );
@@ -186,14 +167,13 @@ export default async function handler(req, res) {
 
 
 
-        let iconStatus =
+        let status =
             "STIL";
 
 
         if(!online){
 
-            iconStatus =
-                "OFFLINE";
+            status="OFFLINE";
 
         }
 
@@ -201,8 +181,7 @@ export default async function handler(req, res) {
             vessel.status === "VAART"
         ){
 
-            iconStatus =
-                "VAART";
+            status="VAART";
 
         }
 
@@ -232,11 +211,12 @@ export default async function handler(req, res) {
         catch(error){
 
             console.error(
-                "Sea area fout:",
+                "Marine:",
                 error.message
             );
 
         }
+
 
 
 
@@ -258,8 +238,7 @@ export default async function handler(req, res) {
                 vessel.speed,
 
 
-            status:
-                iconStatus,
+            status,
 
 
             online,
@@ -274,16 +253,14 @@ export default async function handler(req, res) {
 
 
 
-            /*
-            WEATHER
-            */
-
             wind_speed:
                 windSpeed,
 
 
             wind_bft:
-                windBft,
+                kmhToBeaufort(
+                    windSpeed
+                ),
 
 
             wind_direction:
@@ -291,31 +268,30 @@ export default async function handler(req, res) {
 
 
             wind_compass:
-                windCompass,
+                degreesToCompass(
+                    windDirection
+                ),
 
 
-            rain,
+            rain:
+                current.precipitation || 0,
 
 
-            temperature,
+            temperature:
+                current.temperature_2m ?? null,
 
 
-
-            /*
-            MARINE
-            */
 
             area:
-                marine?.[0]?.name || null,
+                marine?.[0]?.name ?? null,
 
 
             area_category:
-                marine?.[0]?.category || null,
+                marine?.[0]?.category ?? null,
 
 
 
             google_maps:
-
                 `https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
 
 
@@ -329,15 +305,14 @@ export default async function handler(req, res) {
 
 
         console.error(
-            "AIS API fout:",
+            "AIS API:",
             error
         );
 
 
         return res.status(500).json({
 
-            error:
-                error.message
+            error:error.message
 
         });
 

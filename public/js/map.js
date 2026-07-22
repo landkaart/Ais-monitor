@@ -112,8 +112,9 @@ data.latitude,
 data.longitude
 ];
 
-console.log(data.latitude, data.longitude);
+//console.log(data.latitude, data.longitude);
 
+alert(data.latitude + ", " + data.longitude);
 
 
 const windResponse = await fetch(

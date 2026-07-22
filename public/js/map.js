@@ -1,48 +1,8 @@
-const map =
-L.map("map")
-.setView(
-[52,5],
-8
-);
+import { db } from "../lib/db.js";
 
-
-const street = L.tileLayer(
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-);
-
-const sea = L.tileLayer(
-"https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
-);
-
-street.addTo(map);
-sea.addTo(map);
-
-
-
-
-
-const shipIcon =
-L.icon({
-
-iconUrl:"/img/ship.png",
-
-iconSize:[
-50,
-50
-],
-
-iconAnchor:[
-25,
-25
-]
-
-});
-
-
-
-let marker;
 
 function kmhToBeaufort(kmh) {
+
     if (kmh < 1) return 0;
     if (kmh < 6) return 1;
     if (kmh < 12) return 2;
@@ -55,157 +15,206 @@ function kmhToBeaufort(kmh) {
     if (kmh < 89) return 9;
     if (kmh < 103) return 10;
     if (kmh < 118) return 11;
+
     return 12;
 }
 
+
 function degreesToCompass(deg) {
+
     const directions = [
-        "N", "NNO", "NO", "ONO",
-        "O", "OZO", "ZO", "ZZO",
-        "Z", "ZZW", "ZW", "WZW",
-        "W", "WNW", "NW", "NNW"
+        "N","NNO","NO","ONO",
+        "O","OZO","ZO","ZZO",
+        "Z","ZZW","ZW","WZW",
+        "W","WNW","NW","NNW"
     ];
 
-    return directions[Math.round(deg / 22.5) % 16];
+    return directions[
+        Math.round(deg / 22.5) % 16
+    ];
 }
 
 
-async function updateShip(){
 
+export default async function handler(req,res){
 
 try{
 
 
-const response =
-await fetch(
-"/api/status"
-);
+const mmsi =
+process.env.MMSI;
 
 
 
-const data =
-await response.json();
+const result =
+await db.execute({
 
-const windResponse = await fetch(
-`https://api.open-meteo.com/v1/forecast?latitude=${data.latitude}&longitude=${data.longitude}&current=wind_speed_10m,wind_direction_10m`
-);
+sql:`
+SELECT *
+FROM positions
+WHERE mmsi=?
+ORDER BY id DESC
+LIMIT 1
+`,
 
-const windData = await windResponse.json();
+args:[
+mmsi
+]
 
-const windSpeed = windData.current.wind_speed_10m;
-const windDirection = windData.current.wind_direction_10m;
-const beaufort = kmhToBeaufort(windSpeed);
-
-const windCompass = degreesToCompass(windDirection);
-
-document.getElementById("status").innerHTML =
-
-`
-<b>Status:</b>
-${data.status}
-
-<br>
-
-<b>Snelheid:</b>
-${data.speed}
-knopen
-
-<br>
-
-<b>Laatste AIS:</b>
-${data.minutes_ago}
-min geleden
-
-<br>
-
-
-<b>Wind:</b>
-
-<b>
-
-${windSpeed} km/u (${beaufort} Bft)
-
-<br>
-
-<b>Richting:</b>
-
-${windCompass} (${windDirection}°)
-
-`;
-
-
-const pos =
-[
-data.latitude,
-data.longitude
-];
-
-//console.log(data.latitude, data.longitude);
-
-//alert(data.latitude + ", " + data.longitude);
+});
 
 
 
+if(result.rows.length===0){
 
-if(!marker){
+return res.status(404).json({
+error:"Geen AIS positie"
+});
 
-
-marker =
-L.marker(
-pos,
-{
-icon:shipIcon
 }
 
-)
-.addTo(map);
 
 
-map.setView(
-pos,
-14
+const vessel =
+result.rows[0];
+
+
+
+/*
+ WEER
+*/
+
+
+const weatherResponse =
+await fetch(
+
+`https://api.open-meteo.com/v1/forecast?latitude=${vessel.latitude}&longitude=${vessel.longitude}&current=wind_speed_10m,wind_direction_10m,precipitation,temperature_2m`
+
 );
 
+
+
+const weather =
+await weatherResponse.json();
+
+
+
+const windSpeed =
+weather.current.wind_speed_10m;
+
+
+const windDirection =
+weather.current.wind_direction_10m;
+
+
+const windBft =
+kmhToBeaufort(windSpeed);
+
+
+const windCompass =
+degreesToCompass(windDirection);
+
+
+const rain =
+weather.current.precipitation;
+
+
+const temperature =
+weather.current.temperature_2m;
+
+
+
+
+/*
+ AIS STATUS
+*/
+
+
+const lastUpdate =
+new Date(
+vessel.created_at
+);
+
+
+
+const minutesAgo =
+Math.round(
+(Date.now()-lastUpdate.getTime())/60000
+);
+
+
+
+let online=true;
+
+
+if(minutesAgo>180){
+
+online=false;
+
+}
+
+
+
+let iconStatus;
+
+
+if(!online){
+
+iconStatus="OFFLINE";
+
+}
+else if(vessel.status==="VAART"){
+
+iconStatus="VAART";
 
 }
 else{
 
-
-marker.setLatLng(pos);
-
+iconStatus="STIL";
 
 }
 
 
 
-marker.bindPopup(
+return res.json({
 
-`
+mmsi:vessel.mmsi,
 
-<b>MMSI:</b>
-${data.mmsi}
+latitude:vessel.latitude,
 
-<br>
+longitude:vessel.longitude,
 
-<b>Status:</b>
-${data.status}
+speed:vessel.speed,
 
-<br>
+status:iconStatus,
 
-<b>Snelheid:</b>
-${data.speed}
-knopen
+online,
 
-<br><br>
+last_update:vessel.created_at,
 
-<a target="_blank"
-href="${data.google_maps}">
-Google Maps
-</a>
+minutes_ago:minutesAgo,
 
-`
 
-);
+// WEER
+
+wind_speed:windSpeed,
+
+wind_bft:windBft,
+
+wind_direction:windDirection,
+
+wind_compass:windCompass,
+
+rain:rain,
+
+temperature:temperature,
+
+
+google_maps:
+`https://www.google.com/maps?q=${vessel.latitude},${vessel.longitude}`
+
+
+});
 
 
 }
@@ -214,16 +223,14 @@ catch(error){
 
 console.error(error);
 
-}
+
+res.status(500).json({
+
+error:error.message
+
+});
 
 }
 
 
-
-updateShip();
-
-
-setInterval(
-updateShip,
-60000
-);
+}

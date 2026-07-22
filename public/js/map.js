@@ -129,18 +129,8 @@ ${windSpeed} km/u (${beaufort} Bft)
 
 <b>Richting:</b>
 
-${windCompass} (${windDirection}°
+${windCompass} (${windDirection}°)
 
-
-
-<a href="${data.google_maps}"
-target="_blank">
-
-📍 Google Maps
-
-</a>
-
-`;
 
 
 
@@ -152,7 +142,7 @@ data.longitude
 
 //console.log(data.latitude, data.longitude);
 
-alert(data.latitude + ", " + data.longitude);
+//alert(data.latitude + ", " + data.longitude);
 
 
 

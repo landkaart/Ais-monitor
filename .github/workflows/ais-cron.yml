@@ -1,6 +1,7 @@
 name: AIS update
 
 on:
+	push:
   schedule:
     - cron: "*/30 * * * *"
 

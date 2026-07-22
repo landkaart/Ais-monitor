@@ -1,6 +1,30 @@
 import { db } from "../lib/db.js";
 
 
+await db.execute(`
+
+CREATE TABLE IF NOT EXISTS positions (
+
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+ mmsi TEXT NOT NULL,
+
+ latitude REAL NOT NULL,
+
+ longitude REAL NOT NULL,
+
+ speed REAL,
+
+ created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+  )
+
+`);
+
+console.log("Tabel users bestaat nu");
+
+
+
 export default async function handler(req, res) {
 
 

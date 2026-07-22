@@ -112,6 +112,10 @@ data.latitude,
 data.longitude
 ];
 
+console.log(data.latitude, data.longitude);
+
+
+
 const windResponse = await fetch(
 `https://api.open-meteo.com/v1/forecast?latitude=${data.latitude}&longitude=${data.longitude}&current=wind_speed_10m,wind_direction_10m`
 );

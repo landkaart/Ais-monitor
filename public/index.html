@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>AIS Live Tracker</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+
+
+		#map {
+			width: 100%;
+			height: 100%;
+		}
+
+
+		.info {
+
+			position: absolute;
+
+			top: 10px;
+			left: 10px;
+
+			background: white;
+
+			padding: 10px;
+
+			z-index: 1000;
+
+			border-radius: 8px;
+
+			font-family: Arial;
+
+		}
+	</style>
+
+
+</head>
+
+
+<body>
+
+
+	<div class="info">
+
+		🚢 AIS Monitor
+
+		<br>
+
+		<span id="status">
+			Wachten op AIS...
+		</span>
+
+	</div>
+
+
+	<div id="map"></div>
+
+
+
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
+	<script>
+		// Startpositie Nederland
+
+		const map =
+			L.map("map")
+			.setView(
+				[52.1, 4.3],
+				9
+			);
+
+
+
+		L.tileLayer(
+
+			"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+			{
+
+				maxZoom: 19
+
+			}
+
+		).addTo(map);
+
+
+
+
+		// Schip marker
+
+		const shipIcon =
+			L.icon({
+
+				iconUrl: "https://cdn-icons-png.flaticon.com/512/870/870130.png",
+
+				iconSize: [
+					40,
+					40
+				]
+
+			});
+
+
+
+		let marker =
+			L.marker(
+
+				[52.1, 4.3],
+
+				{
+					icon: shipIcon
+				}
+
+			)
+
+			.addTo(map);
+
+
+
+
+		// vaarroute
+
+		let route = [];
+
+		let line =
+			L.polyline(route)
+			.addTo(map);
+
+
+
+
+		// Live verbinding
+
+		const stream =
+			new EventSource(
+				"/api/stream"
+			);
+
+
+
+		stream.onmessage =
+			function(event) {
+
+
+
+				const vessel =
+					JSON.parse(event.data);
+
+
+
+				const position = [
+
+					vessel.latitude,
+
+					vessel.longitude
+
+				];
+
+
+
+				// marker verplaatsen
+
+				marker.setLatLng(position);
+
+
+
+				// kaart volgen
+
+				map.panTo(position);
+
+
+
+				// route toevoegen
+
+				route.push(position);
+
+
+				line.setLatLngs(route);
+
+
+
+				// popup
+
+				marker.bindPopup(
+
+					`
+🚢 MMSI:
+${vessel.mmsi}
+
+<br><br>
+
+Snelheid:
+${vessel.speed ?? 0}
+knopen
+
+<br><br>
+
+Tijd:
+${vessel.created_at}
+
+`
+
+				);
+
+
+
+				// informatie
+
+				document
+					.getElementById("status")
+					.innerHTML =
+
+					`
+Laatste positie:
+<br>
+${vessel.latitude},
+${vessel.longitude}
+
+<br>
+
+${vessel.speed ?? 0} knopen
+
+`;
+
+
+
+			};
+
+
+
+		stream.onerror =
+			function() {
+
+				document
+					.getElementById("status")
+					.innerHTML =
+					"⚠ Verbinding verbroken";
+
+			};
+	</script>
+
+
+</body>
+
+</html>

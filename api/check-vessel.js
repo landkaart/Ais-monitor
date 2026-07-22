@@ -71,7 +71,7 @@ export default async function handler(req, res) {
     // Marinesia API
 
     const url =
-    `https://api.marinesia.com/api/v2/vessel/location/latest?mmsi=${mmsi}&key=${process.env.MARINESIA_KEY}`;
+    `https://api.marinesia.com/api/v1/vessel/${mmsi}/location/latest?key=${process.env.MARINESIA_KEY}`;
 
 
     const response =

@@ -58,8 +58,16 @@ function kmhToBeaufort(kmh) {
     return 12;
 }
 
-const beaufort = kmhToBeaufort(windSpeed);
+function degreesToCompass(deg) {
+    const directions = [
+        "N", "NNO", "NO", "ONO",
+        "O", "OZO", "ZO", "ZZO",
+        "Z", "ZZW", "ZW", "WZW",
+        "W", "WNW", "NW", "NNW"
+    ];
 
+    return directions[Math.round(deg / 22.5) % 16];
+}
 
 
 async function updateShip(){
@@ -86,8 +94,9 @@ const windData = await windResponse.json();
 
 const windSpeed = windData.current.wind_speed_10m;
 const windDirection = windData.current.wind_direction_10m;
+const beaufort = kmhToBeaufort(windSpeed);
 
-
+const windCompass = degreesToCompass(windDirection);
 
 document.getElementById("status").innerHTML =
 
@@ -118,9 +127,9 @@ ${windSpeed} km/u (${beaufort} Bft)
 
 <br>
 
-<b>Windrichting:</b>
+<b>Richting:</b>
 
-${windDirection}°
+${windCompass} (${windDirection}°
 
 
 

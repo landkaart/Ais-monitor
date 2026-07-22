@@ -1,0 +1,676 @@
+
+
+{
+
+  "type": "FeatureCollection",
+
+  "name": "Met Office Sea Areas",
+
+  "features": [
+
+
+
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Viking",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [0,61],
+      [4,61],
+      [4,58.5],
+      [0,58.5],
+      [0,61]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "North Utsire",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [4,61],
+      [5,61],
+      [5.5833,59],
+      [4,59],
+      [4,61]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "South Utsire",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [4,59],
+      [5.5833,59],
+      [7.0833,58],
+      [7.5,57.75],
+      [4,57.75],
+      [4,59]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Forties",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-1,58.5],
+      [4,58.5],
+      [4,56],
+      [-1,56],
+      [-1,58.5]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Forth",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-1.8333,55.6667],
+      [-1,56],
+      [-1,57],
+      [-2.1667,57],
+      [-1.8333,55.6667]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Cromarty",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-2.1667,57],
+      [-1,57],
+      [-1,58.5],
+      [-3,58.5],
+      [-2.1667,57]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Tyne",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-0.3333,54.25],
+      [0.75,54.25],
+      [-1,56],
+      [-1.8333,55.6667],
+      [-0.3333,54.25]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Dogger",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-1,56],
+      [0.75,54.25],
+      [4,54.25],
+      [4,56],
+      [-1,56]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Fisher",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [4,57.75],
+      [4,56],
+      [8.1667,56],
+      [8.5833,57.0833],
+      [7.5,57.75],
+      [4,57.75]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "German Bight",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [8.1667,56],
+      [4,56],
+      [4,54.25],
+      [4.6667,53.5833],
+      [4.6667,52.75],
+      [8.1667,56]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Humber",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [1.6667,52.75],
+      [4.6667,52.75],
+      [4.6667,53.5833],
+      [4,54.25],
+      [-0.3333,54.25],
+      [1.6667,52.75]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Thames",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [1.4167,51.25],
+      [2.9167,51.25],
+      [4.6667,52.75],
+      [1.6667,52.75],
+      [1.4167,51.25]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Dover",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [0.25,50.75],
+      [1.5,50.25],
+      [2.9167,51.25],
+      [1.4167,51.25],
+      [0.25,50.75]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Wight",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-1.9167,50.5833],
+      [-1.9167,49.75],
+      [1.5,50.25],
+      [0.25,50.75],
+      [-1.9167,50.5833]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Portland",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-3.5,50.4167],
+      [-3.5,48.8333],
+      [-1.9167,49.75],
+      [-1.9167,50.5833],
+      [-3.5,50.4167]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Plymouth",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-5.75,50.0833],
+      [-6.25,50],
+      [-6.25,48.45],
+      [-4.75,48.45],
+      [-3.5,48.8333],
+      [-3.5,50.4167],
+      [-5.75,50.0833]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Biscay",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-6.25,48.45],
+      [-6.25,43.5833],
+      [-4.75,48.45],
+      [-6.25,48.45]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Trafalgar",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-15,35],
+      [-6.25,35],
+      [-8.6667,41],
+      [-15,41],
+      [-15,35]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "FitzRoy",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-15,48.45],
+      [-15,41],
+      [-8.6667,41],
+      [-6.25,43.5833],
+      [-6.25,48.45],
+      [-15,48.45]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Sole",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-6.25,50],
+      [-15,50],
+      [-15,48.45],
+      [-6.25,48.45],
+      [-6.25,50]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Lundy",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-6.25,52.5],
+      [-6.25,50],
+      [-5.75,50.0833],
+      [-5.0833,52],
+      [-6.25,52.5]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Fastnet",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-10,51.5833],
+      [-10,50],
+      [-6.25,50],
+      [-6.25,52.5],
+      [-10,51.5833]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Irish Sea",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-5.0833,52],
+      [-6.25,52.5],
+      [-5.75,54.8333],
+      [-5.75,54.75],
+      [-5.0833,52]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Shannon",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-15,53.5],
+      [-15,50],
+      [-10,50],
+      [-10,51.5833],
+      [-10.0833,53.5],
+      [-15,53.5]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Rockall",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-10,58],
+      [-15,58],
+      [-15,53.5],
+      [-10.0833,53.5],
+      [-10,54.3333],
+      [-10,58]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Malin",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-5.8333,57],
+      [-10,57],
+      [-10,54.3333],
+      [-5.75,54.75],
+      [-5.0833,54.8333],
+      [-5.0833,54.75],
+      [-5.8333,57]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Hebrides",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-10,60.5833],
+      [-10,57],
+      [-5.8333,57],
+      [-5,58.6667],
+      [-10,60.5833]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Bailey",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-15,62.4167],
+      [-15,58],
+      [-10,58],
+      [-10,60.5833],
+      [-15,62.4167]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Faeroes",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-7.5,63.3333],
+      [-11.5,61.1667],
+      [-7.25,59.5],
+      [-2.5,61.8333],
+      [-7.5,63.3333]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Fair Isle",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-2.5,61.8333],
+      [-7.25,59.5],
+      [-5,58.6667],
+      [-3,58.5],
+      [0,58.5],
+      [0,61],
+      [-2.5,61.8333]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Southeast Iceland",
+    "category": "Shipping Forecast"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-18,63.5833],
+      [-11.5,61.1667],
+      [-7.5,63.3333],
+      [-13.5833,65],
+      [-18,63.5833]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Denmark Strait",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-21.6667,71],
+      [-20,71],
+      [-20,66],
+      [-22.8333,65],
+      [-40,65],
+      [-21.6667,71]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "North Iceland",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-20,71],
+      [-10,71],
+      [-10,64],
+      [-13.5833,65],
+      [-20,66],
+      [-20,71]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Norwegian Basin",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-10,71],
+      [5,71],
+      [5,65],
+      [-2.5,61.8333],
+      [-10,64],
+      [-10,71]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "West Northern Section",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-27.5,65],
+      [-40,65],
+      [-40,55],
+      [-27.5,55],
+      [-27.5,65]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "East Northern Section",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-27.5,65],
+      [-27.5,55],
+      [-15,55],
+      [-15,62.5],
+      [-18,63.6667],
+      [-27.5,65]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "West Central Section",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-27.5,55],
+      [-40,55],
+      [-40,45],
+      [-27.5,45],
+      [-27.5,55]
+    ]]
+  }
+},
+{
+  "type": "Feature",
+  "properties": {
+    "name": "East Central Section",
+    "category": "North Atlantic High Seas"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-15,55],
+      [-27.5,55],
+      [-27.5,45],
+      [-15,45],
+      [-15,55]
+    ]]
+  }
+}
+  ]
+}

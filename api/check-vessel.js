@@ -72,6 +72,9 @@ export default async function handler(req, res) {
 
     const url =
     `https://api.marinesia.com/api/v1/vessel/${mmsi}/location/latest?key=${process.env.MARINESIA_KEY}`;
+		
+		console.log(url);
+
 
 
     const response =
@@ -80,7 +83,7 @@ export default async function handler(req, res) {
 
     const json =
         await response.json();
-
+ARIN
 
     if (!json.data) {
 

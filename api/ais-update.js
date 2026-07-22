@@ -5,6 +5,7 @@ import { sendTelegram } from "../lib/telegram.js";
 export default async function handler(req, res) {
   try {
 		
+		/*
 		if (
 
       req.headers.authorization !==
@@ -19,7 +20,8 @@ export default async function handler(req, res) {
 				
 			});
 			
-		}
+		}*/
+		
 		
 		
 		

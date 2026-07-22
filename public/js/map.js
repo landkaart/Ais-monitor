@@ -6,18 +6,18 @@ L.map("map")
 );
 
 
+const street = L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+);
 
-L.tileLayer(
+const sea = L.tileLayer(
+"https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
+);
 
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+street.addTo(map);
+sea.addTo(map);
 
-{
 
-maxZoom:19
-
-}
-
-).addTo(map);
 
 
 

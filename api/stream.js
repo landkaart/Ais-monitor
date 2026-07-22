@@ -1,106 +1,155 @@
 import { db } from "../lib/db.js";
 
 
-await db.execute(`
-
-CREATE TABLE IF NOT EXISTS positions (
-
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-
- mmsi TEXT NOT NULL,
-
- latitude REAL NOT NULL,
-
- longitude REAL NOT NULL,
-
- speed REAL,
-
- created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-
-  )
-
-`);
-
-console.log("Tabel users bestaat nu");
+export default async function handler(req,res){
 
 
+    res.setHeader(
+        "Content-Type",
+        "text/event-stream"
+    );
 
-export default async function handler(req, res) {
+    res.setHeader(
+        "Cache-Control",
+        "no-cache, no-transform"
+    );
+
+    res.setHeader(
+        "Connection",
+        "keep-alive"
+    );
 
 
-	res.setHeader(
-		"Content-Type",
-		"text/event-stream"
-	);
-
-
-	res.setHeader(
-		"Cache-Control",
-		"no-cache"
-	);
-
-
-	res.setHeader(
-		"Connection",
-		"keep-alive"
-	);
+    res.flushHeaders();
 
 
 
-	let lastId = 0;
+    let lastId = 0;
+
+
+    let running = true;
 
 
 
-	const timer =
-		setInterval(async () => {
+    req.on(
+        "close",
+        () => {
 
+            running = false;
 
-			const result =
-				await db.execute({
-
-					sql: `
-            SELECT *
-            FROM positions
-            WHERE id > ?
-            ORDER BY id
-            `,
-
-					args: [
-						lastId
-					]
-
-				});
+        }
+    );
 
 
 
-			for (
-				const row of result.rows
-			) {
+    // heartbeat
 
-				lastId =
-					row.id;
+    const heartbeat =
+    setInterval(()=>{
 
+        if(running){
 
-				res.write(
+            res.write(": ping\n\n");
 
-					`data: ${JSON.stringify(row)}\n\n`
+        }
 
-				);
-
-			}
-
-
-		}, 10000);
+    },25000);
 
 
 
-	req.on(
-		"close",
-		() => {
 
-			clearInterval(timer);
+    async function stream(){
 
-		}
-	);
+
+        while(running){
+
+
+            try {
+
+
+                const result =
+                await db.execute({
+
+                    sql:
+                    `
+                    SELECT *
+                    FROM positions
+                    WHERE id > ?
+                    ORDER BY id ASC
+                    `,
+
+                    args:[
+                        lastId
+                    ]
+
+                });
+
+
+
+                for(
+                    const row of result.rows
+                ){
+
+                    lastId =
+                    row.id;
+
+
+                    res.write(
+                        `data: ${JSON.stringify(row)}\n\n`
+                    );
+
+                }
+
+
+            }
+            catch(error){
+
+                console.error(
+                    "SSE fout:",
+                    error
+                );
+
+
+                res.write(
+                    `event: error\ndata:${JSON.stringify({
+                        message:error.message
+                    })}\n\n`
+                );
+
+            }
+
+
+
+            // wacht 10 seconden
+
+            await new Promise(
+                resolve =>
+                setTimeout(resolve,10000)
+            );
+
+
+        }
+
+
+    }
+
+
+
+    stream();
+
+
+
+    req.on(
+        "close",
+        ()=>{
+
+            clearInterval(
+                heartbeat
+            );
+
+            res.end();
+
+        }
+    );
 
 }

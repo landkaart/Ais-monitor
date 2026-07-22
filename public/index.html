@@ -1,112 +1,49 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
-  <meta charset="UTF-8">
-  <title>AIS Monitor</title>
 
-  <link rel="stylesheet"
-        href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<meta charset="UTF-8">
 
-  <style>
-    html, body, #map {
-      height: 100%;
-      margin: 0;
-    }
+<title>AIS Monitor</title>
 
-    .info {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background: white;
-      padding: 10px;
-      border-radius: 8px;
-      font-family: Arial, sans-serif;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"
+/>
+
+<link
+rel="stylesheet"
+href="/css/style.css"
+/>
+
 </head>
+
+
 <body>
 
-<div class="info" id="info">
-  Laden...:-)))
+
+<div id="panel">
+
+<h2>🚢 AIS Monitor</h2>
+
+<div id="status">
+Laden...
 </div>
+
+</div>
+
 
 <div id="map"></div>
 
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script>
-  const map = L.map("map").setView([52, 5], 8);
+<script src="/js/map.js"></script>
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
-    }
-  ).addTo(map);
-
-  let marker;
-  let route;
-
-  async function loadMap() {
-    // laatste positie
-    const latestRes = await fetch("/api/latest");
-    const ship = await latestRes.json();
-
-    if (!ship.latitude) return;
-
-    const lat = ship.latitude;
-    const lng = ship.longitude;
-
-    // route
-    const historyRes = await fetch("/api/history");
-    const history = await historyRes.json();
-
-    const points = history.map(p => [p.latitude, p.longitude]);
-
-    if (route) {
-      map.removeLayer(route);
-    }
-
-    route = L.polyline(points, {
-      color: "blue",
-      weight: 3
-    }).addTo(map);
-
-    if (!marker) {
-      marker = L.marker([lat, lng]).addTo(map);
-      map.setView([lat, lng], 12);
-    } else {
-      marker.setLatLng([lat, lng]);
-    }
-
-    const maps = `https://www.google.com/maps?q=${lat},${lng}`;
-
-    marker.bindPopup(`
-      <b>AIS positie</b><br>
-      MMSI: ${ship.mmsi}<br>
-      Snelheid: ${ship.speed} kn<br>
-      Laatste update: ${ship.created_at}<br><br>
-      <a href="${maps}" target="_blank">
-        Open in Google Maps
-      </a>
-    `);
-
-    document.getElementById("info").innerHTML = `
-      <b>AIS Monitor</b><br>
-      MMSI: ${ship.mmsi}<br>
-      Snelheid: ${ship.speed} kn<br>
-      Laatste update: ${ship.created_at}
-    `;
-  }
-
-  loadMap();
-
-  // elke minuut verversen
-  setInterval(loadMap, 60000);
-</script>
 
 </body>
+
 </html>

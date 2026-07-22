@@ -1,0 +1,22 @@
+name: AIS update
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+
+  workflow_dispatch:
+
+jobs:
+
+  update:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Call Vercel AIS API
+
+        run: |
+          curl -X GET \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          https://ais-monitor.vercel.app/api/ais-update

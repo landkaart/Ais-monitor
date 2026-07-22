@@ -82,6 +82,19 @@ min geleden
 
 <br>
 
+
+<b>Wind:</b>
+
+${windSpeed} km/u
+
+<br>
+
+<b>Windrichting:</b>
+
+${windDirection}°
+
+
+
 <a href="${data.google_maps}"
 target="_blank">
 
@@ -99,7 +112,14 @@ data.latitude,
 data.longitude
 ];
 
+const windResponse = await fetch(
+`https://api.open-meteo.com/v1/forecast?latitude=${data.latitude}&longitude=${data.longitude}&current=wind_speed_10m,wind_direction_10m`
+);
 
+const windData = await windResponse.json();
+
+const windSpeed = windData.current.wind_speed_10m;
+const windDirection = windData.current.wind_direction_10m;
 
 if(!marker){
 

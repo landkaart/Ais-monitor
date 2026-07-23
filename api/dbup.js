@@ -5,6 +5,7 @@ async function createWeatherHistory(){
 
     try {
 			
+			
 
         await db.execute({
 

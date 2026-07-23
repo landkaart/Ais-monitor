@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf";
-import seaAreas from "./metoffice_sea_areas.geojson";
+import seaAreas from "./area.geojson";
 
 /**
  * Geef het zeegebied terug waarin een positie ligt

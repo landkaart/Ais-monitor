@@ -136,7 +136,16 @@ async function updateShip() {
         </a>
         `;
 
+         const marineTrafficUrl =
+`https://www.marinetraffic.com/nl/ais/details/ships/mmsi:${data.mmsi}`;
 
+
+document.getElementById("marineTraffic").innerHTML = `
+<a href="${marineTrafficUrl}"
+onclick="window.open(this.href,'marinetraffic','width=1200,height=800');return false;">
+⚓ MarineTraffic
+</a>
+`;
 
 
         const pos = [

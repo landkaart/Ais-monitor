@@ -4,6 +4,7 @@ import { db } from "../lib/db.js";
 async function createWeatherHistory(){
 
     try {
+			
 
         await db.execute({
 

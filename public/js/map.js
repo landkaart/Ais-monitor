@@ -134,6 +134,10 @@ async function updateShip() {
         <a href="${data.google_maps}" target="_blank">
         📍 Google Maps
         </a>
+				
+				<div id="marineTraffic"></div>
+				
+				
         `;
 
          const marineTrafficUrl =

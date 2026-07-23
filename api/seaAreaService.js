@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf";
-import seaAreas from "./area.geojson";
+import seaAreas from "./area.json" with { type: "json" };
 
 /**
  * Geef het zeegebied terug waarin een positie ligt
